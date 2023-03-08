@@ -4,19 +4,22 @@ import classes from "./tableau_wrapper.module.css";
 import { OptionalTableauVizProps } from "./TableauViz";
 import { TableauVizRef } from "./types";
 import LoadingSpinner from "./LoadingSpinner";
+import { FilterParameters } from "./ScrapedTableauTypes/VizInterfaces"
 
 interface TableauEmbed extends OptionalTableauVizProps {
   sourceUrl: string;
   version?: string;
   loadingSpinner?: React.ReactElement;
+  filterParams?: FilterParameters[];
 }
 
 function TableauEmbed(props: TableauEmbed, ref: TableauVizRef) {
-  const { sourceUrl, version, ...optionalProperties } = props;
+  const { sourceUrl, version, filterParams, ...optionalProperties } = props;
   const { isSuccess, isError, component, ...tableau } = useTableau({
     ref,
     sourceUrl,
     version,
+    filterParams,
     optionalProperties,
   });
 

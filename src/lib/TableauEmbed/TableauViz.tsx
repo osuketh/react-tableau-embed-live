@@ -10,6 +10,7 @@ import * as React from "react";
 import { TableauEventType } from "./ScrapedTableauTypes/Enums";
 import { FilterUpdateType } from "./ScrapedTableauTypes/ExternalContract_Shared_Namespaces_Tableau";
 import { TableauVizRef } from "./types";
+import { FilterParameters } from "./ScrapedTableauTypes/VizInterfaces"
 
 export interface OptionalTableauVizProps {
   height?: React.CSSProperties["height"];
@@ -76,7 +77,7 @@ declare global {
   }
 }
 
-function TableauViz(props: TableauVizCustomProps, ref: TableauVizRef) {
+function TableauViz(props: TableauVizCustomProps, ref: TableauVizRef, filterParams?: FilterParameters[]) {
   const vizRef = React.useRef<any>(null);
   React.useImperativeHandle(ref, () => vizRef.current);
 
@@ -271,7 +272,11 @@ function TableauViz(props: TableauVizCustomProps, ref: TableauVizRef) {
     return () => {};
   }, [vizRef]);
 
-  return <tableau-viz id="tableauViz" ref={vizRef} {...props}></tableau-viz>;
+  return (
+    <tableau-viz id="tableauViz" ref={vizRef} {...props}>{filterParams.map(e => {
+        return <viz-filter field={e.field} value={e.value}> </viz-filter>
+    })}</tableau-viz>
+  );
 }
 
 export default React.forwardRef(TableauViz);

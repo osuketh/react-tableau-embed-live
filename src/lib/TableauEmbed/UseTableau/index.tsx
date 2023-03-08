@@ -5,6 +5,7 @@ import TableauViz, {
 } from "../TableauViz";
 import { TableauVizRef } from "../types";
 import useScript from "./useScript";
+import { FilterParameters } from "../ScrapedTableauTypes/VizInterfaces"
 
 type UseTableauStatus = "idle" | "loading" | "ready" | "error";
 
@@ -25,6 +26,7 @@ export interface UseTableauParams {
   sourceUrl: string;
   version?: string;
   optionalProperties?: OptionalTableauVizProps;
+  filterParams?: FilterParameters[];
 }
 
 // maps api versions to api status
@@ -94,7 +96,7 @@ export default function useTableau(args: UseTableauParams): UseTableauReturn {
   return {
     status,
     component: status === "ready" && (
-      <TableauViz ref={args.ref} {...tableauVizProps} />
+      <TableauViz ref={args.ref} filterParams={args.filterParams} {...tableauVizProps} />
     ),
     errorMessage: errMsg,
     isIdle: status === "idle",
